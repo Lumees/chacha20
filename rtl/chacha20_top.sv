@@ -19,6 +19,13 @@
 //   3. Wait for done_o pulse
 //   4. Read keystream_o (512-bit keystream), XOR with plaintext
 //   5. Assert next_i to generate next block (counter auto-increments)
+//
+// Notes:
+//   - If start_i and next_i are asserted simultaneously, start_i takes
+//     priority (full re-init, counter is NOT auto-incremented).
+//   - IRQ timing differs between wrappers: chacha20_axil registers the
+//     done edge (fires 1 cycle after done_o); chacha20_wb is combinational
+//     (fires same cycle). Both are single-cycle pulses.
 // =============================================================================
 
 `timescale 1ns/1ps
