@@ -178,12 +178,20 @@ module chacha20_axil (
         end
 
         // KEY[0..7] at 0x10..0x2C (word addr 0x04..0x0B)
-        if (wr_addr >= 8'h04 && wr_addr <= 8'h0B)
-          reg_key[wr_addr[2:0]] <= wdata_lat;
+        // Explicit per-slot to avoid bit-slice index wrapping
+        if (wr_addr == 8'h04) reg_key[0] <= wdata_lat;
+        if (wr_addr == 8'h05) reg_key[1] <= wdata_lat;
+        if (wr_addr == 8'h06) reg_key[2] <= wdata_lat;
+        if (wr_addr == 8'h07) reg_key[3] <= wdata_lat;
+        if (wr_addr == 8'h08) reg_key[4] <= wdata_lat;
+        if (wr_addr == 8'h09) reg_key[5] <= wdata_lat;
+        if (wr_addr == 8'h0A) reg_key[6] <= wdata_lat;
+        if (wr_addr == 8'h0B) reg_key[7] <= wdata_lat;
 
         // NONCE[0..2] at 0x30..0x38 (word addr 0x0C..0x0E)
-        if (wr_addr >= 8'h0C && wr_addr <= 8'h0E)
-          reg_nonce[wr_addr[1:0]] <= wdata_lat;
+        if (wr_addr == 8'h0C) reg_nonce[0] <= wdata_lat;
+        if (wr_addr == 8'h0D) reg_nonce[1] <= wdata_lat;
+        if (wr_addr == 8'h0E) reg_nonce[2] <= wdata_lat;
 
         // COUNTER at 0x3C (word addr 0x0F)
         if (wr_addr == 8'h0F)
